@@ -1,24 +1,24 @@
 /*
 《算法基础与在线实践》例题2-6 显示器 POJ2745
-
+write by xucaimao,20171115,23:00测试通过
+程序测试要考虑极端情况
 */
 #include<cstdio>
 
 unsigned short digit[]={10794,2080,8866,10402,2216,10378,10890,2082,10922,10410};//0~9的字模
-int num[10];//储存整数的各个位，从低位到高位
-int dnum;//一个整数有几位数字
-char digitarr[23][12];//一个字的显示矩阵
-char numarr[23][110];//整个数字的显示矩阵
+char digitarr[24][13];//单个数字字符的显示矩阵
+//开始是定义digitarr[24][12]，导致s=10时数组越界，程序出错
+char numarr[24][110];//整个数字的显示矩阵
 
 int getBit(unsigned short v,int n){
 	//取字模的第n位
 	return (v>>n)&1;
 }
 
-void digitToDisp(char txtdisp[23][12],int n,int s){
-	//数字n,s控制字的大小,1<=s<=10,转化为二位字符数组
+void digitToMatrix(char txtdisp[24][13],int n,int s){
+	//数字n,s控制字的大小,1<=s<=10,转化为二维字符矩阵
 	for(int i=0;i<23;i++)
-			for(int j=0;j<12;j++)
+			for(int j=0;j<13;j++)
 				txtdisp[i][j]=' ';
 
 	unsigned short v=digit[n];
@@ -57,7 +57,7 @@ void digitToDisp(char txtdisp[23][12],int n,int s){
 			txtdisp[r][c]='-';
 }
 
-void mymerge(char source[23][12],char tar[23][110] ,int ord,int s){
+void mymerge(char source[24][13],char tar[24][110] ,int ord,int s){
 	//把第ord(>=1)个数字的显示矩阵合并到总的显示矩阵里面
 	int cs=(ord-1)*(s+2+1);
 	int ce=cs+(s+2);
@@ -67,10 +67,11 @@ void mymerge(char source[23][12],char tar[23][110] ,int ord,int s){
 			tar[r][c]=source[r][c-cs];
 }
 
-void printDigit(char txtdisp[23][110],int n,int s){
+void printMatrix(char txtdisp[24][110],int n,int s){
 	//打印有n位，字符大小为s的显示矩阵
 	int maxr=2*s+3;
 	int maxc=(s+2+1)*n-1;
+
 	for(int r=0;r<maxr;r++){
 		for(int c=0;c<maxc;c++)
 			printf("%c",txtdisp[r][c]);
@@ -78,38 +79,27 @@ void printDigit(char txtdisp[23][110],int n,int s){
 	}
 }
 
-int getnum(int n){
-	//取得一个整数的位数，并把各位存放在数组num中
-	int d=0;
-	while(n>0){
-		num[d]=n%10;
-		n/=10;
-		d++;
-	}
-	return d;
-}
-
 int main(){
-	int s,n;
-	int T=0;
+	int s;
+	char n[10];//储存整数的各个位，从高位到低位
 	freopen("f0206.in","r",stdin);
 	while(1){
-		for(int i=0;i<23;i++)
+		for(int i=0;i<24;i++)
 			for(int j=0;j<110;j++)
 				numarr[i][j]=' ';
 
-		scanf("%d%d",&s,&n);
-		if(s+n ==0)break;
-		T++;
-		int dn=getnum(n);
-		int ord=1;//数字个数
-		for(int i=dn-1;i>=0;i--){
-			digitToDisp(digitarr,num[i],s);
-			mymerge(digitarr,numarr,ord,s);
-			ord++;
+		scanf("%d",&s);
+		scanf("%s",n);
+		if(s==0)break;
+		int i=0;//数字位数
+		while(n[i]!='\0'){//从最高位为开始，按位转换
+			digitToMatrix(digitarr,n[i]-'0',s);
+			mymerge(digitarr,numarr,i+1,s);
+			i++;
 		}
-		if(T>1)printf("\n");
-		printDigit(numarr,dn,s);	
+		
+		printMatrix(numarr,i,s);
+		printf("\n");	
 	}
 	return 0;
 }
