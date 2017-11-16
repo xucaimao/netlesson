@@ -41,40 +41,40 @@ void pressKey(char key[],int len,int n){
 }
 
 int main(){
-	char sr[32],tr[32];//储存密码锁的初始与目标状态
+	char src[32],tar[32];//储存密码锁的初始与目标状态
 	char tmp[32];//在此数组上进行实际操作
 	freopen("in-2.txt","r",stdin);
-	scanf("%s",sr);
-	scanf("%s",tr);
-	int len=strlen(sr);
+	scanf("%s",src);
+	scanf("%s",tar);
+	int len=strlen(src);
 
-	strcmp(tmp,sr);
+	strcpy(tmp,src);
 	int sum1=0;
 	for(int i=0;i<len-1;i++){
-		if(tmp[i]!=tr[i]){
+		if(tmp[i]!=tar[i]){
 			pressKey(tmp,len,i+1);
 			sum1++;
 		}
 	}
-	if(tmp[len-1]!=tr[len-1])
+	if(tmp[len-1]!=tar[len-1])
 		sum1=-1;
 	
-	strcmp(tmp,sr);
+	strcpy(tmp,src);
 	pressKey(tmp,len,0);//首先按下第一个按钮
 	int sum2=1;
 	for(int i=0;i<len-1;i++){
-		if(tmp[i]!=tr[i]){
+		if(tmp[i]!=tar[i]){
 			pressKey(tmp,len,i+1);
 			sum2++;
 		}
 	}
-	if(tmp[len-1]!=tr[len-1])
+	if(tmp[len-1]!=tar[len-1])
 		sum2=-1;
 
 	if(sum1==-1 && sum2==-1)
 		printf("impossible\n");
-	else{
+	else if(sum1>0 && sum2>0)
 		printf("%d\n",sum1<sum2 ? sum1:sum2);
-	}
+	else printf("%d\n",sum1>sum2 ? sum1:sum2);
 	return 0;
 }
