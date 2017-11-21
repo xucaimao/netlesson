@@ -1,3 +1,9 @@
+/*
+程序设计实习MOOC / 程序设计与算法（一）第二周测验(2017冬季)  
+5:大象喝水
+
+*/
+
 #include<cstdio>
 const double pi=3.14159;
 const double v=20000;
