@@ -16,15 +16,15 @@ int main(){
 	int n;
 	scanf("%d",&n);
 	getchar();
-	for(int r=1;r<=n;r++){
+	for(int r=1;r<=n;r++){//从1，1开始，不用越界检查
 		for(int c=1;c<=n;c++){
 			char ch;
 			scanf("%c",&ch);
-			if(ch=='w')//w=1,y=0
+			if(ch=='w')//white=1,yellow=0
 				wal[r][c]=1;
 			else wal[r][c]=0;
 		}
-		getchar();//这是个坑，开始没有这行，导致输入错误，
+		getchar();//忽略输入行尾。这是个坑，开始没有这行，导致输入错误，
 		//但样本的结果却是正确的，提交就WA。debug才发现错误
 	}
 		
@@ -36,19 +36,20 @@ int main(){
 		memcpy(tmp,wal,sizeof(wal));
 		memset(cmd,0,sizeof(cmd));
 		int t=command;
-		for(int i=1;i<=n;i++){//命令变二进制
+		for(int i=1;i<=n;i++){//命令从整数变二进制字符串
 			cmd[1][i]=t%2;
 			t/=2;
 		}
 		int count=0;//统计本次涂画的次数
 		for(int r=1;r<=n;r++){//处理n行
 			for(int c=1;c<=n;c++){//处理一行内的n列
-				if(cmd[r][c]){//进行涂画
-					tmp[r][c]^=1;
-					tmp[r][c-1]^=1;
-					tmp[r][c+1]^=1;
-					tmp[r-1][c]^=1;
-					tmp[r+1][c]^=1;
+				if(cmd[r][c]){//进行涂画，数组开大，不用考虑越界
+					tmp[r][c]^=1;//本身
+					tmp[r][c-1]^=1;//左
+					tmp[r][c+1]^=1;//右
+					tmp[r-1][c]^=1;//上，此行操作不要，也不影响结果
+					//加上后，对于正确答案，程序运行结束后，tmp数组全零，与真实状况一致
+					tmp[r+1][c]^=1;//下
 					count++;
 				}
 			}
