@@ -1,8 +1,9 @@
 /*
 程序设计与算法（二）算法基础 第二周 递归 例题1
 《算法基础与在线实践》第四章 例题3
- 小游戏(类似于连连看)
-write by xucaimao,20171123，21:30开始编程，
+ 小游戏(类似于连连看) POJ2802
+write by xucaimao,20171123 21:30开始编程，20171124 13:00AC
+扩展了打印最短路径的功能
 */
 
 #include <cstdio>
@@ -29,7 +30,6 @@ void dfs(int currentx,int currenty,int endx,int endy,int step,int direction){
 		//找到一条路径
 		if(step<minstep){//路径必上一次小，记录步数及具体路径
 			minstep=step;
-			way[step+1][0]=endx;way[step+1][1]=endy;//记录最后一步
 			memcpy(minway,way,sizeof(way));
 		}
 	}
@@ -65,7 +65,7 @@ int main(){
 			for(int j=1;j<=w;j++){
 				char ch=getchar();
 				if(ch=='X')//
-					gameBoard[i][j]=1;
+					gameBoard[j][i]=1;//此处是坑，注意w是列坐标，h是行坐标
 			}
 			getchar();//忽略行尾
 		}
@@ -79,17 +79,19 @@ int main(){
 			if(startx+starty+endx+endy ==0)break;
 			way[0][0]=startx;
 			way[0][1]=starty;
-			dfs(startx,starty,endx,endy,0,-1);
+			dfs(startx,starty,endx,endy,0,-1);//从第一步开始
 			printf("Pair %d: ", ++pairnum);
 			if(minstep==MaxStep)
 				printf("impossible.\n");
 			else {
 				printf("%d segments.\n", minstep);
-				for(int i=0;i<minstep+1;i++)
-					printf("(%d,%d) ",minway[i][0],minway[i][1] );
-				printf("\n");
+				//开始打印路径
+				//for(int i=0;i<minstep+1;i++)
+					//printf("(%d,%d) ",minway[i][0],minway[i][1] );
+				//printf("\n");
 			}
-		}	
+		}
+		printf("\n");//每组数据之后一个空行,没有导致PE	
 	}
 	return 0;
 }
