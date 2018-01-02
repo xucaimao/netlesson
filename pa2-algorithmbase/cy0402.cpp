@@ -1,25 +1,26 @@
 /*
 程序设计与算法（二）第四周测验 2:派 
 write by xucaimao,2017-12-13
+pi的精度是关键
 */
 #include<cstdio>
-#include <ctime>
-#include <iostream>
-using namespace std;
+
 
 const int maxn=10000+10;
-const double pi=3.141592654;
-const double eps=1e-8;
+const double pi=3.141592653589;
+const double eps=1e-7;
 double pie[maxn];//记录每个派的底面积
 int n=0,f=0;
 
 bool judge(double area){
 	//如果每个人分得area大小的派，能否够分
 	int sum=0;
-	for(int i=0;i<n;i++)
-		sum+=(int)pie[i]/area;//每块派能分成几份(取整)
-	if(sum>=f+1)return true;
-	else return false;
+	for(int i=0;i<n;i++){
+		sum+=(int)(pie[i]/area);//每块派能分成几份(取整)
+		if(sum>=f+1)return true;//在循环内部判断，否则会超时
+	}
+	
+	return false;
 }
 
 double solve(double left,double right){
@@ -36,6 +37,7 @@ double solve(double left,double right){
 }
 
 int main(){
+	freopen("cy0402.in","r",stdin);
 	int r;
 	double maxarea=0;
 	scanf("%d%d",&n,&f);
