@@ -1,5 +1,5 @@
 /*
-程序设计与算法（二）第四周测验 1:Aggressive cows
+程序设计与算法（二）第四周测验 1:Aggressive cows POJ2456
 write by xucaimao,2017-12-14
 */
 #include<cstdio>

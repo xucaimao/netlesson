@@ -1,7 +1,7 @@
 /*
 程序设计与算法（二）算法基础 第六周 动态规划 例题6 POJ4131:Charm Bracelet
 write by xucaimao,2017-12-30 22:30,AC at 
-f[i][j]表示,在前i件物品里面选择若干件,使得体积不超过j时,物品总价值最高的方法
+f[i][j]表示,在前i件物品里面选择若干件,使得体积不超过j时,物品总价值最高的方法的数量
 f[i][j]= f[i-1][j]								不选择第i件物品,在前i-1件物品里面选
 		 f[i-1][j-obj[i].volume]+obj[i].price	选择第i件物品
 		 obj[i].price							i=1且obj[i].volume<=M

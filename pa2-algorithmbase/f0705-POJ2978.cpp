@@ -1,6 +1,6 @@
 /*
 程序设计与算法（二）算法基础 第六周 动态规划 例题5 POJ2978:Help Jimmy
-write by xucaimao,2017-12-26 21:30,AC at 2017-12-26 16:59:13
+write by xucaimao,2017-12-26 21:30,AC 
 记忆化递归第一版
 
 */
