@@ -8,7 +8,6 @@
 #include <stdlib.h>
 #define MAXN 100010
 struct Nod{
-    int add;
     int value;
     int next;
 };
@@ -33,22 +32,22 @@ void ReadList(){
     scanf("%d%d",&N,&K);
     getchar();//忽略行尾空格
     struct Nod node;
-    int d;
+    int d,add;
     for(int i=1;i<=N;i++){
         scanf("%s",address);
-        node.add=str2int(address,5);
+        add=str2int(address,5);
         scanf("%d",&d);
         node.value=d;
         scanf("%s",address);
         node.next=str2int(address,5);
-        data[node.add]=node;
+        data[add]=node;
     }
 }
 //打印链表
 void PrintList(){
     int ptr=data[Head].next;
     while(ptr>=0){
-        printf("%05d %d ",data[ptr].add,data[ptr].value);
+        printf("%05d %d ",ptr,data[ptr].value);
         if(data[ptr].next==-1) printf("-1\n");
         else  printf("%05d\n",data[ptr].next);
         ptr=data[ptr].next;
@@ -56,35 +55,28 @@ void PrintList(){
 }
 //用于反向的函数
 void ReverseList(){
-    if(N==1 || K==1)return;
     //定义标记点
-    int pre=data[Head].next,p=data[pre].next;
-    int pnext=data[p].next;
-    int tail=data[Head].next;//指向反向段的尾
-    int k=K;
-    while(k>1){//开始反向结点
-        data[p].next=data[pre].add;//后点指向前点
+    int pnew=data[Head].next,pold=data[pnew].next;
+    int temp;
+    int k=1;
+    while(k<K){//开始反向结点
+        temp=data[pold].next;
+        data[pold].next=pnew;//后点指向前点
         //修改标记点
-        pre=data[p].add;
-        if(pnext>=0){//pnext==-1到表尾,防止越界
-            p=data[pnext].add;
-            pnext=data[pnext].next;
-        }
-        k--;
+        pnew=pold;//向后移位
+        pold=temp;//向后移位
+        k++;
     }
-    //修改头结点
-    data[Head].next=data[pre].add;
-    //连接反向段与剩余段
-    if(pnext==-1)data[tail].next=-1;
-    else data[tail].next=data[p].add;
+    data[ data[Head].next ].next=pold;//修改原来第一结点的后续
+    data[Head].next=pnew;//修改头结点的后续
 }
 
 int main() {
-    //freopen("F:\\xcmprogram\\clion\\reverselink\\in.txt","r",stdin);
+    freopen("F:\\xcmprogram\\netlesson\\ds-zju\\in.txt","r",stdin);
     ReadList();
-    //PrintList();
+    PrintList();
     ReverseList();
-    //printf("After reverse : \n");
+    printf("After reverse : \n");
     PrintList();
     return 0;
 }
