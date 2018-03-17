@@ -21,6 +21,7 @@ int targ[MAXN];//数据
 
 int M,N,K;
 
+//初始化容量为n的堆栈
 void InitStack(int n){
     for(int i=0;i<n;i++)
         st.data[i]=0;
