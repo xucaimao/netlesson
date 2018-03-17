@@ -3,4 +3,4 @@ project(ds_zj C)
 
 set(CMAKE_C_STANDARD 99)
 
-add_executable(ds_zj main.c )
+add_executable(ds_zj main.c PopSequence.c)

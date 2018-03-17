@@ -1,11 +1,6 @@
-/*中国大学MOOC-陈越、何钦铭-数据结构-2018春
- * 编程作业程序
- * 把后面的程序粘贴进来，就可以修改编译
- * */
-
 //中国大学MOOC-陈越、何钦铭-数据结构-2018春
 // 02-线性结构4 Pop Sequence（25 分）
-// write by xucaimao,2018-03-15
+// write by xucaimao,2018-03-17
 // 采用数组模拟栈
 
 #include <stdio.h>
@@ -71,12 +66,13 @@ int StackSize(){
 // 2。若后一个数比前一个数大，又要push其之前的数 再判断　
 // 3。若后一个数比前一个数小，则要判断栈顶元素是否与其相等
 int Check(int arr[],int n){
-    int p=0;//指向arr中元素的位置
+    int p=0;//指向arr中待比较的数字的位置
     int num=1;//准备入栈的数字
     Push(num);
     num++;
     while(p<n){
         while(arr[p]>Top() && StackSize()<M){
+            //待比较的数比栈顶数字大 && 栈还有空间
             Push(num);
             num++;
         }
