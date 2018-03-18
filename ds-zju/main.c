@@ -79,7 +79,7 @@ void ReverseList(){
 }
 
 int main() {
-    freopen("F:\\xcmprogram\\netlesson\\ds-zju\\in.txt","r",stdin);
+    freopen("/Users/xcm/xcmprogram/netlesson/ds-zju/in.txt","r",stdin);
     ReadList();
     PrintList();
     ReverseList();
