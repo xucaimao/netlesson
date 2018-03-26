@@ -34,7 +34,8 @@
 *.dSYM
 
 #CLion
-cmake-build-debug
+cmake-build-debug/
+.idea/
 
 #vscode
 .vscode
