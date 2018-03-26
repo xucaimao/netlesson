@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.10)
-project(ds_zj C)
+project(ds_zj)
 
-set(CMAKE_C_STANDARD 99)
+set(CMAKE_C_STANDARD 11)
 
-add_executable(ds_zj main.c)
+add_executable(ds_zj main.c )
