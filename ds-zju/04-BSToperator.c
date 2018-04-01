@@ -1,7 +1,3 @@
-/*中国大学MOOC-陈越、何钦铭-数据结构-2018春
- * 编程作业程序
- * 把后面的程序粘贴进来，就可以修改编译
- * */
 
 /*中国大学MOOC-陈越、何钦铭-数据结构-2018春
  * 04-树7 二叉搜索树的操作集（30 分）
@@ -131,6 +127,7 @@ BinTree Delete( BinTree BST, ElementType X ){
         BST->Right=Delete(BST->Right,X);
     else{//找到节点
         if(BST->Right && BST->Left){//被删除的节点同时有左右子节点
+            //也可以采用找左子树中最大值的方法
             Tmp=FindMin(BST->Right);//找右子树中的最小节点
             BST->Data=Tmp->Data;//右子树最小节点的值赋给当前节点
             BST->Right=Delete(BST->Right,Tmp->Data);//删除右子树中的最小节点

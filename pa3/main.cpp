@@ -16,7 +16,7 @@ public:
     CArray(int s=minsize):data(new int[s]){}
     //复制构造函数
     CArray(const CArray & s){
-        
+
     }
     ~CArray(){
         delete[] data;
