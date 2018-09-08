@@ -1,6 +1,8 @@
 /*
-程序拷贝进来编译执行
- //TODO
+ 程序设计实习MOOC /程序设计与算法（三）第一周测验(2018秋季)
+ 4:神秘的数组初始化
+ 填空，使得程序输出结果是：123,456
+ write by xucaimao,2018-09-03,AC
 */
 #include <iostream>
 using namespace std;

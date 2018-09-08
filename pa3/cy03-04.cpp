@@ -27,7 +27,7 @@ int main()
     const A a(10);
     const A * p = a.getPointer();
     cout << p->v << endl;
-    p->v++;//编译会报错
+    p->v++;//p是const A * 类型，如果这样写编译会报错
 
     return 0;
 }
