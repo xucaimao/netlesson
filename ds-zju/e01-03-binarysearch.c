@@ -1,9 +1,8 @@
-/*
-ÖĞ¹ú´óÑ§MOOC-³ÂÔ½¡¢ºÎÇÕÃú-Êı¾İ½á¹¹-2018´º 
-µÚÒ»ÖÜ Á·Ï°3 ¶ş·Ö²éÕÒ
-write by xucaimao,2018-03-09 20:30
-*/
-
+/*ä¸­å›½å¤§å­¦MOOC-é™ˆè¶Šã€ä½•é’¦é“­-æ•°æ®ç»“æ„-2018æ˜¥
+ * 01-å¤æ‚åº¦3 äºŒåˆ†æŸ¥æ‰¾
+ * write by xucaimao,2018-03-12
+ *
+ * */
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -13,51 +12,48 @@ typedef int ElementType;
 
 typedef int Position;
 struct LNode {
-    ElementType Data[MAXSIZE];
-    Position Last; /* ±£´æÏßĞÔ±íÖĞ×îºóÒ»¸öÔªËØµÄÎ»ÖÃ */
+	ElementType Data[MAXSIZE];
+	Position Last;
 };
-typedef struct LNode * List;/*ListÊÇÖ¸Õë±äÁ¿*/
+typedef struct LNode * List;
 
-List ReadInput(); /* ²ÃÅĞÊµÏÖ£¬Ï¸½Ú²»±í¡£ÔªËØ´ÓÏÂ±ê1¿ªÊ¼´æ´¢ */
+List ReadInput();
 Position BinarySearch( List L, ElementType X );
 
 int main()
 {
-    List L;
-    ElementType X;
-    Position P;
+	List L;
+	ElementType X;
+	Position P;
 
-    L = ReadInput();
-    scanf("%d", &X);
-    P = BinarySearch( L, X );
-    printf("%d\n", P);
+	L = ReadInput();
+	scanf("%d", &X);
+	P = BinarySearch( L, X );
+	printf("%d\n", P);
 
-    return 0;
+	return 0;
 }
 
-/* ÄãµÄ´úÂë½«±»Ç¶ÔÚÕâÀï */
 List ReadInput(){
 	int i,n,a;
-	static struct LNode La;
-	/*List La=(List)malloc(sizeof(LNode));*/
+	static struct LNode La; //è¿™é‡Œé‡‡ç”¨é™æ€å˜é‡ï¼Œå¦åˆ™æ­¤å‡½æ•°ç»“æŸåå˜é‡å°±ä¼šå¤±æ•ˆ
 	scanf("%d", &n);
 	for(i=1;i<=n;i++)
 		scanf("%d", &La.Data[i]);
 	La.Last=n;
-	return &La;
+	return &La;	//è¿”å›æŒ‡é’ˆ
 }
 
 Position BinarySearch( List L, ElementType X ){
 	int l=1,r=L->Last,mid;
- 
- 	while(l<=r){
-    	mid=l+(r-l)/2;
-    	if(L->Data[mid]>X)
-      		r=mid-1;
-    	else if(L->Data[mid]<X)
-      		l=mid+1;
-    	else
-      		return mid;
-  	}
-  	return NotFound;
+	while(l<=r){
+		mid=l+(r-l)/2;
+		if(L->Data[mid]==X)
+			return mid;
+		else if(L->Data[mid]<X)
+			l=mid+1;
+		else
+			r=mid-1;
+	}
+	return NotFound;
 }
