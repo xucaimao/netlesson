@@ -11,7 +11,7 @@
 #define OK 0
 typedef int Status;
 
-typedef struct Stack{
+typedef struct {
     int data[MAXN];
     int top,size;
 }Stack;

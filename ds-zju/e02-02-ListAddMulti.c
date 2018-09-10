@@ -1,7 +1,7 @@
 //中国大学MOOC-陈越、何钦铭-数据结构-2018春
 // 02-线性结构2 一元多项式的乘法与加法运算（20 分）
-// write by xucaimao,2018-03-14
-// 采用动态链表来实现
+// write by xucaimao,2018-03-10提交通过
+// 采用带头结点的动态链表来实现
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -45,16 +45,7 @@ void PrintList(List l){
     }
     printf("\n");
 }
-//释放链表空间，只保留表头结点
-void FreeList(List l){
-    List p=l->next,pnext;
-    while(p){
-        pnext=p->next;
-        free(p);
-        p=pnext;
-    }
-    l->next=NULL;
-}
+
 //链表形式的多项式加法
 List AddList(List la,List lb){
     List head=(List)malloc(sizeof(struct Nod));//生成头结点
@@ -85,9 +76,6 @@ List AddList(List la,List lb){
             tail=temp;
         }
     }
-    //这里有问题，lc和la或lb后面的结点共用了
-    //对于本程序，可以测试通过，但是对于普遍性的程序，需要修改
-    //应该采用重新复制结点的方式
     if(pa)tail->next=pa;
     if(pb)tail->next=pb;
     return head;
@@ -104,14 +92,9 @@ List MultiList(List la,List lb){
         List tail=listtemp;
         List pb=lb->next;
         while(pb){
-            //每一次相乘所得的listtemp链表的长度其实是一定的，都等于表lb的长度
-            //所以才可以使用下面的方法节省空间
-            List tempnode=tail->next;
-            if(tempnode==NULL){
-                //防止每次循环生成新结点，浪费空间
-                tempnode=(List)malloc(sizeof(struct Nod));
-                tempnode->next=NULL;
-            }
+            //每一次相乘所得的listtemp链表的长度其实是一定的，也就是表lb的长度
+            List tempnode=(List)malloc(sizeof(struct Nod));
+            tempnode->next=NULL;
             tempnode->coef=pa->coef * pb->coef;//系数相乘
             tempnode->exp=pa->exp + pb->exp;//指数相加
             tail->next=tempnode;
@@ -121,12 +104,14 @@ List MultiList(List la,List lb){
         //ans=ans+listtemp
         ans=AddList(ans,listtemp);
         pa=pa->next;
+        //释放listtemp链表空间
+        //FreeList(listtemp);
     }
     return ans;
 }
 
 int main() {
-    freopen("F:\\xcmprogram\\clion\\ds-zj\\in.txt","r",stdin);
+    //freopen("F:\\xcmprogram\\clion\\ds-zj\\in.txt","r",stdin);
     List la=ReadList();
     List lb=ReadList();
     //PrintList(la);
