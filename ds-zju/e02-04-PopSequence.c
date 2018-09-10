@@ -49,6 +49,7 @@ Status Pop(){
 }
 
 //取栈顶元素，但是元素不出栈
+//栈为空时返回-1
 int Top(){
     int ans=-1;
     if(st.top>=0){
@@ -71,13 +72,14 @@ int Check(int arr[],int n){
     int num=1;//准备入栈的数字
     Push(num);
     num++;
-    while(p<n){
+    while(p<n){//比较arr[]中的n个数
         while(arr[p]>Top() && StackSize()<M){
             //待比较的数比栈顶数字大 && 栈还有空间
             Push(num);
             num++;
         }
         if(arr[p]==Top()){
+            //待比较的数等于栈顶的数
             Pop();
             p++;
         }

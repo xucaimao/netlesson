@@ -15,10 +15,10 @@ struct Nod{
 };
 
 int N,K;
-int Head=MAXN-1;//Head为头指针
+int Head=MAXN-1;//Head为头节点在结构数组中的下标
 struct Nod data[MAXN];//静态链表,头结点放在数组最后一个元素
 
-//字符串的前n位转位int
+//字符串的前n位转为int
 int str2int(char s[],int n){
     if(s[0]=='-') return -1;
     int num=0;
@@ -26,6 +26,7 @@ int str2int(char s[],int n){
         num=num*10+(s[i]-'0');
     return num;
 }
+
 //读数据并初始化链表
 void ReadList(){
     char address[10];
@@ -34,12 +35,12 @@ void ReadList(){
     scanf("%d%d",&N,&K);
     getchar();//忽略行尾空格
     struct Nod node;
-    int d,add;
+    int v,add;
     for(int i=1;i<=N;i++){
         scanf("%s",address);
         add=str2int(address,5);
-        scanf("%d",&d);
-        node.value=d;
+        scanf("%d",&v);
+        node.value=v;
         scanf("%s",address);
         node.next=str2int(address,5);
         data[add]=node;
@@ -58,16 +59,17 @@ void PrintList(){
 //用于反向的函数
 //需要注意，读入的数据，有的节点可能不在链表上，因此需要重新统计有效的节点数
 void ReverseList(){
-//    int times=N/K;
+    //统计有效的节点数
     int nodenum=0;
     int p=data[Head].next;
     while(p != -1){
         nodenum++;
         p=data[p].next;
     }
+    //计算反转的段数
     int times=nodenum/K;
 
-    int head=Head;//head指向第一个要翻转的节点的前序
+    int head=Head;//head指向第一个要翻转的节点的前驱
     while(times--){
         int pnew=data[head].next;
         int pold=data[pnew].next;
