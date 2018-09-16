@@ -47,13 +47,12 @@ void PrintList(List l){
 }
 //释放链表空间
 void FreeList(List l){
-    List p=l,pnext;
-    while(p){
-        pnext=p->next;
+    List p;
+    while(l){
+        p=l;
+        l=l->next;
         free(p);
-        p=pnext;
     }
-    l=NULL;
 }
 //链表形式的多项式加法
 //不破坏la和lb的原始结构，重新生成节点

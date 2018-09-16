@@ -84,6 +84,8 @@ List AddList(List la,List lb){
 List MultiList(List la,List lb){
     List ans=(List)malloc(sizeof(struct Nod));//生成头结点
     ans->next=NULL;
+    if(la->next==NULL || lb->next==NULL)
+        return ans;
     List pa=la->next;
     while(pa){
         //把la中的每一项分别与lb相乘,结果放在listtemp链表

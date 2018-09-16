@@ -26,23 +26,24 @@ struct Node{
 };
 
 struct Node tree[MaxTree];//静态数组表示树
-
+//栈的初始化
 void InitStack(struct Stack * s){
     s->top=0;
     s->size=0;
 }
-
+//把数n入栈s
 void Push(struct Stack * s,int n){
     s->top++;
     s->data[s->top]=n;
 }
-void Pop(struct Stack * s){
+//取出栈s的栈顶元素
+int Pop(struct Stack * s){
+    int ret=-1;
     if(s->top>=0){
-        //if(p_in>0) printf(" ");
-        //printf("%d",s->data[s->top]);
-        inorder[p_in++]=s->data[s->top];
+        ret=s->data[s->top];
         s->top--;
     }
+    return ret;
 }
 
 //根据数据建立树的前序序列preorder[]和中序序列inorder[]
@@ -57,10 +58,13 @@ void ReadTree(){
         if(s[1]=='u'){
             scanf("%d",&num);
             Push(&St,num);
-            preorder[p_pre++]=num;
+            preorder[p_pre++]=num;  //建立前序序列
         }
         if(s[1]=='o'){
-            Pop(&St);
+            num=Pop(&St);
+            inorder[p_in++]=num;    //建立后序序列
+            //if(p_in>0) printf(" ");
+            //printf("%d",num);
         }
     }
 }

@@ -17,7 +17,7 @@ struct TreeNode{
     Tree right;
 }Ta[MaxTree],Tb[MaxTree];
 
-int stat[10];//用于标识该节点有没有父亲节点，如果没有则说明该节点是根节点
+int haveFather[10];//用于标识该节点有没有父亲节点，如果没有则说明该节点是根节点
 
 //输入数据存储入数组,返回树根在数组中的下标
 Tree BuildTree(struct TreeNode T[]){
@@ -25,25 +25,25 @@ Tree BuildTree(struct TreeNode T[]){
     Tree root=Null;
     char l,r;
     scanf("%d\n",&N);
-    memset(stat,0, sizeof(stat));
+    memset(haveFather,0, sizeof(haveFather));
     for(int i=0;i<N;i++){
         scanf("%c %c %c\n",&T[i].value,&l,&r);
         T[i].left =l-'0';
         if(T[i].left<0) T[i].left=Null;
-        else stat[T[i].left]=1;
+        else haveFather[T[i].left]=1;
         T[i].right=r-'0';
         if(T[i].right<0) T[i].right=Null;
-        else stat[T[i].right]=1;
+        else haveFather[T[i].right]=1;
     }
     for(int i=0;i<N;i++){
-        if(stat[i]==0){
+        if(haveFather[i]==0){
             root=i;
             break;
         }
     }
     return root;
 }
-
+//判断二叉树是否同构
 int Isomorphic(Tree ra,Tree rb){
     //递归方法
     if(ra==Null && rb==Null)//两棵空树
@@ -70,7 +70,7 @@ int Isomorphic(Tree ra,Tree rb){
 }
 
 int main(){
-    freopen("/Users/xcm/xcmprogram/netlesson/ds-zju/in.txt","r",stdin);
+    //freopen("/Users/xcm/xcmprogram/netlesson/ds-zju/in.txt","r",stdin);
     Tree R1,R2;
     R1=BuildTree(Ta);
     //printf("The root is %d\n",R1);

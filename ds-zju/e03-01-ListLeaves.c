@@ -1,6 +1,8 @@
 /*中国大学MOOC-陈越、何钦铭-数据结构-2018春
  * 03-树2 List Leaves（25 分）
  * 用结构数组表示二叉树
+ * 已知各个节点的左右孩子节点，并据此建树。再按先上下、后左右的顺序输出各个叶子节点
+ * 关键是找到树的根
  * wirte by xucaimao,2018-03-25
  * */
 
@@ -16,7 +18,7 @@ struct TreeNode{
     Tree right;
 }T[MaxTree];
 
-int stat[10];//用于标识该节点有没有父亲节点，如果没有则说明该节点是根节点
+int haveFather[10];//用于标识该节点有没有父亲节点，如果没有则说明该节点是根节点
 int leafnum=0;//用于记录叶子节点的数量，并用于控制打印格式
 
 //简易的队列
@@ -31,19 +33,19 @@ Tree BuildTree(struct TreeNode T[]){
     Tree root=Null;
     char l,r;
     scanf("%d\n",&N);
-    memset(stat,0, sizeof(stat));
+    memset(haveFather,0, sizeof(haveFather));
     for(int i=0;i<N;i++){
         T[i].add =i;
         scanf("%c %c\n",&l,&r);
         T[i].left =l-'0';
-        if(T[i].left<0) T[i].left=Null;
-        else stat[T[i].left]=1;
+        if(T[i].left<0) T[i].left=Null;     //读入'-'
+        else haveFather[T[i].left]=1;       //该节点有父亲节点
         T[i].right=r-'0';
         if(T[i].right<0) T[i].right=Null;
-        else stat[T[i].right]=1;
+        else haveFather[T[i].right]=1;
     }
     for(int i=0;i<N;i++){
-        if(stat[i]==0){
+        if(haveFather[i]==0){
             root=i;
             break;
         }
@@ -52,7 +54,7 @@ Tree BuildTree(struct TreeNode T[]){
 }
 
 
-//层次遍历以r为根节点的树T，输出叶子节点
+//层次遍历以root为根节点的树T，输出叶子节点
 void bfs(struct TreeNode T[],Tree root){
     struct List L;
     L.data[0]=T[root];//树根节点入队列

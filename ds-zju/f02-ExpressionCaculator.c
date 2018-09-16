@@ -1,6 +1,6 @@
 
 
-/*中国大学MOOC-陈越、何钦铭-数据结构-2018春
+/*中国大学MOOC-陈越、何钦铭-数据结构-2018
  * 栈的应用--表达式计算
  * 严蔚敏《数据结构C语言版》P52
  * write by xucaimao,2018-03-19
@@ -64,7 +64,7 @@ Status Pop(Stack * s,ElementType * e){
     return INFEASIBLE;
 }
 
-//字符串转int
+//字符数组s[]的前n个字符转成int值
 int str2int(char s[],int n){
     if(s[0]=='-') return -1;
     int num=0;
