@@ -9,7 +9,7 @@
 #include <stdlib.h>
 
 typedef int ElementType;
-typedef struct TNode *Position;
+typedef struct TNode * Position;
 typedef Position BinTree;
 struct TNode{
     ElementType Data;
@@ -17,11 +17,46 @@ struct TNode{
     BinTree Right;
 };
 
-void InorderTraversal( BinTree BT );
-void Destroy( BinTree BT);  //删除二叉树释放所有节点空间
+int Comp(BinTree Ts,BinTree Tt){
+    if(Ts==NULL && Tt==NULL)return 1;//二者都空
+    else if(Ts==NULL && Tt)return 0;//有一个非空
+    else if(Tt==NULL && Ts)return 0;//有一个非空
+    else if(Ts->Data != Tt->Data)//二者都非空，但是节点值不同
+        return 0;
+    else if( Comp(Ts->Left,Tt->Left) && Comp(Ts->Right,Tt->Right) )
+        return 1;
+}
+//删除二叉树释放所有节点空间
+void Destroy( BinTree BT){
+    //后续遍历删除节点
+    if(BT==NULL)return;
+    Destroy(BT->Left);
+    Destroy(BT->Right);
+    free(BT);
+}
 
-BinTree Insert( BinTree BST, ElementType X );
-int Comp(BinTree Ts,BinTree Tt);
+void InorderTraversal( BinTree BT ){
+    if(BT==NULL)return;
+    InorderTraversal(BT->Left);
+    printf(" %d",BT->Data);
+    InorderTraversal(BT->Right);
+}
+//向二叉树插入节点，递归程序
+BinTree Insert( BinTree BST, ElementType X ){
+    if(BST==NULL){
+        BST=(Position)malloc(sizeof(struct TNode));
+        BST->Data=X;
+        BST->Left=NULL;
+        BST->Right=NULL;
+    }
+    else{
+        if(X<BST->Data)
+            BST->Left=Insert(BST->Left,X);
+        if(X>BST->Data)
+            BST->Right=Insert(BST->Right,X);
+    }
+    return BST;
+}
 
 int main() {
     freopen("F:\\xcmprogram\\netlesson\\ds-zju\\in.txt","r",stdin);
@@ -62,43 +97,3 @@ int main() {
     return 0;
 }
 
-int Comp(BinTree Ts,BinTree Tt){
-    if(Ts==NULL && Tt==NULL)return 1;//二者都空
-    else if(Ts==NULL && Tt)return 0;//有一个非空
-    else if(Tt==NULL && Ts)return 0;//有一个非空
-    else if(Ts->Data != Tt->Data)//二者都非空，但是节点值不同
-        return 0;
-    else if( Comp(Ts->Left,Tt->Left) && Comp(Ts->Right,Tt->Right) )
-        return 1;
-}
-
-void Destroy( BinTree BT){
-    //后续遍历删除节点
-    if(BT==NULL)return;
-    Destroy(BT->Left);
-    Destroy(BT->Right);
-    free(BT);
-}
-
-void InorderTraversal( BinTree BT ){
-    if(BT==NULL)return;
-    InorderTraversal(BT->Left);
-    printf(" %d",BT->Data);
-    InorderTraversal(BT->Right);
-}
-
-BinTree Insert( BinTree BST, ElementType X ){
-    if(BST==NULL){
-        BST=(Position)malloc(sizeof(struct TNode));
-        BST->Data=X;
-        BST->Left=NULL;
-        BST->Right=NULL;
-    }
-    else{
-        if(X<BST->Data)
-            BST->Left=Insert(BST->Left,X);
-        if(X>BST->Data)
-            BST->Right=Insert(BST->Right,X);
-    }
-    return BST;
-}
