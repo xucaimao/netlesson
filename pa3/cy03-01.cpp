@@ -31,9 +31,9 @@ int main() {
     freopen("/Users/xcm/xcmprogram/netlesson/pa3/in.txt","r",stdin);
     int m,n;
     A a;
-    cout << a.val << endl;
+    cout << a.val << endl;     //输出123
     while(cin >> m >> n) {
-        a.GetObj() = m;
+        a.GetObj() = m;     //m=2,此语句使得a.val=2
         //上面这一句其实可以转化成 a=m,然后再调用构造函数
         cout << a.val << endl;
         a.GetObj() = A(n);

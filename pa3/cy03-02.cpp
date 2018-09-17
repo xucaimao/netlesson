@@ -10,7 +10,7 @@ using namespace std;
 class Base {
 public:
     int k;
-    Base(int n):k(n) { }
+    Base(int n):k{n} { }
 };
 class Big
 {
@@ -25,7 +25,7 @@ public:
     //具体做法就是，通过封闭类的构造函数初始化列表，来进行成员对象的初始
 
 // 在此处补充你的代码
-    Big(int n):v(n),b(Base(n)){}
+    Big(int n):v{n},b{ Base(n) }{}
 };
 int main()
 {

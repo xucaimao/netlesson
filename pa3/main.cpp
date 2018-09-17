@@ -3,80 +3,74 @@
  //TODO
 */
 #include <iostream>
-#include <algorithm>
+#include <cstdio>
+#define Red 0;
+#define Blue 1;
+#include <iostream>
 using namespace std;
 
-const int inc=10;
+char RedSq[5]={'i','l','w','n','d'};//红军士兵制造顺序
+char BlueSq[5]={'l','d','n','i','w'};//蓝军士兵制造顺序
+char MSq[5]={'d','n','i','l','w'};//生命力初始值的输入顺序
+int ord[2][5]={{2,3,4,1,0},{3,0,1,2,4}};
 
-template <typename T>
-class Vector {
-private:
-
-    T theSize;   //实际存贮数据的数量
-    int theCapacity;//可存贮的空间容量
-    int * data; //数据存贮空间
+class Warrior{
 public:
-    //构造函数
-    explicit Vector(int initSize=0):theSize{initSize},theCapacity{initSize+inc} {
-        data=new T[theCapacity];
-    }
-    //复制构造函数,需要采用深拷贝的形式
-    Vector(const Vector& v):theSize{v.theSize},theCapacity{v.theCapacity},data{NULL}{
-        data=new T[v.theCapacity];
-        for(int i=0;i<theSize;i++)
-            data[i]=v.data[i];
-    }
-    ~Vector(){
-        delete[] data;
-    }
+    int number,life,attack;
+    char type;
+    Warrior(int n,int l,int a,char t)
+            :number{n},life{l},attack{a},type{t}{}
 
-    Vector &operator=(const Vector & v){
-        Vector copy=v;
-        std::swap(*this,copy);
-        return *this;
+};
+
+class Headquarter{
+public:
+    int knum;//制造的士兵总数,也就是士兵编号
+    int lifematter;//初始生命元
+    int warrior[5];//分别保存五种武士的数量
+    char sq[5];//武士的制造顺序
+    int lm[5];//每种武士所需要的生命力值,与武士顺序相对应
+    int cur;//当前制造的士兵顺序
+    bool enable;//能否制造士兵的标志
+    //构造函数，初始生命元为m，制造顺序为s[]，每种士兵所需要的生命力，红蓝军:0-红 1-蓝
+    Headquarter(int m,const char s[],const int l[],int side){
+        knum=0;
+        lifematter=m;
+        enable=1;
+        cur=0;
+        for(int i=0;i<5;i++){
+            sq[i]=s[i];
+            lm[i]=l[ ord[side][i] ];//输入顺序与实际顺序转换
+            warrior[i]=0;
+        }
     }
-
-    //返回值的类型是int&
-    int &operator[](int i){
-        return data[i];
-    }
-
-    void push_back(int n){
-            data[theSize]=n;
-            theSize++;
-
-    }
-
-    int length(){
-        return theSize;
+    bool MakeWarrior(){
+        int ok=0;
+        if()
     }
 };
 
-int main()
-{
-    Vector<int> a;
-    for(int i=1;i<8;i++)
-        a.push_back(i);//动态分配内存来存放数组，需要一个指针成员变量
+int main(){
+    freopen("/Users/xcm/xcmprogram/netlesson/pa3/in.txt","r",stdin);
+    int case,M,lm[5];
+    scanf("%d",&case);
+    for(int i=0;i<case;i++){//处理各组数据
+        scanf("%d",&M);
+        for(int j=0;i<5;j++)//读入数据
+            scanf("%d",&lm[j]);
+        Headquarter RED(M,RedSq,lm,0);
+        Headquarter BLUE(M,BlueSq,lm,1);
+        int BlueEnableMake=1;
+        int RedEnableMake=1;
+        while( RedEnableMake || BlueEnableMake ){
+            if(RedEnableMake){
+                RedEnableMake=RED.MakeWarrior();
+            }
+            if(BlueEnableMake){
+                BlueEnableMake=BLUE.MakeWarrior();
+            }
+        }
 
-        cout<<"a is: ";
-    for(int i=0;i<=a.length();i++)
-        cout<<a[i]<<" ";//需要重载"[]"运算符
-        cout<<endl;
-    Vector<int> a2,a3;
-    a2=a;//需要重载"="运算符
-//    cout<<"a2 is: ";
-//    for(int i=0;i<=a2.length();i++)
-//        cout<<a2[i]<<" ";//需要重载"[]"运算符
-//        cout<<endl;
-//    a2=a3;
-//    cout<<"a2 is: ";
-//    for(int i=0;i<a2.length();i++)
-//        cout<<a2[i]<<" ";
-//    cout<<endl;
-//    a3[0]=100;
-//    Vector<int> a4(a);//需要复制构造函数
-//    for(int i=0;i<a4.length();i++)
-//        cout<<a4[i]<<" ";
-//    cout<<endl;
+    }
     return 0;
 }
