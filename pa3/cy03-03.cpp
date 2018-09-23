@@ -37,7 +37,7 @@ public:
         number++;
         Animal::number++;
     }
-    ~Cat(){
+    virtual ~Cat(){ //这里的virtual可以省略
         number--;
         Animal::number--;
     }
