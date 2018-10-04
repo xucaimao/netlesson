@@ -143,3 +143,4 @@ BinTree Delete( BinTree BST, ElementType X ){
     }
     return BST;
 }
+

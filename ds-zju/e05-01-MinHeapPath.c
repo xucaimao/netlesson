@@ -1,3 +1,9 @@
+/*中国大学MOOC-陈越、何钦铭-数据结构-2018秋
+ * 05-树7 堆中的路径 （25 分）
+ * 最小二叉堆
+ * wirte by xucaimao,2018-10-04
+ * 提交通过
+ * */
 #include <stdio.h>
 #include <stdlib.h>
 #define maxSize 1010
