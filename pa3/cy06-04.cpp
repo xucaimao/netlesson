@@ -1,3 +1,9 @@
+/*
+ 程序设计实习MOOC /程序设计与算法（三）第六周测验(2018秋季)
+ 4:怎么又是Fun和Do
+ write by xucaimao,2018-10-10,AC at 2018-10-10
+*/
+
 #include <iostream>
 using namespace std;
 class A {

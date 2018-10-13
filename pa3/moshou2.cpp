@@ -2,7 +2,7 @@
  * 郭伟老师的程序
  * 我只是把成员函数从类的外部移到了内部，就出现了编译错误：
  * PrintResult（）函数中的pHeadquarter->，编译提示：member access into incomplete type 'Headquarter'
- *
+ * 郭老师说，string color =  pHeadquarter->GetColor(); 这条语句前面必须有完整的 Headquarter类的定义
  * */
 
 #include <iostream>
