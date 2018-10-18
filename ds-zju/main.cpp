@@ -1,295 +1,143 @@
-/*中国大学MOOC-陈越、何钦铭-数据结构-2018秋
- * 05-树9 Huffman Codes （30 分）
- * wirte by xucaimao,2018-10-14
- * 初次尝试泛型，感觉很爽
+/*中国大学MOOC-陈越、何钦铭-数据结构-2017秋
+ * 07-图5 Saving James Bond - Hard Version （30 分）
+ * wirte by xucaimao,2018-10-17
+ * 在距离判断的时候，采用直接判断平方的方式，提供运算速度与精度
  * */
-#include <iostream>
+
+#include <cstdio>
 #include <cmath>
-#include <cassert>
-#include <vector>
+#include <cstring>
+#include <queue>
+#include <stack>
 using namespace std;
-const int maxN=64;
-char C[maxN];
-int F[maxN];
-vector<string> Code;
-
-template <typename ElementType>
-class MinHeap{
-    //实现最小堆，为了泛型的考虑，内部大小比较只使用<符号，使用cout进行输出
-private:
-    ElementType *data;
-    int Capacity;
-    int Size;
-
-    void percolateDown(int hole){
-        int child;
-        ElementType tmp=data[hole];
-        while(hole*2 <= Size){//左孩子存在
-            child=hole*2;
-            if(child+1<=Size && data[child+1]<data[child])//右孩子存在且比左孩子小
-                child+=1;
-            //此时child指向左右孩子中较小的
-            if(data[child]<tmp){
-                data[hole]=data[child];//小的元素上移
-                hole=child;
-            }
-            else break;
-        }
-        data[hole]=tmp;
-    }
-
-    int myLog2(int i)const{
-        int ret=0;
-        int x=i;
-        while ( x > 1 ) {
-            x /= 2;
-            ret ++;
-        }
-        return ret;
-    }
-public:
-    MinHeap(int capacity_){
-        Capacity=capacity_;
-        Size=0;
-        data=new ElementType[Capacity+1];//0号元素不使用
-    }
-
-    MinHeap(int arr[],int size_){
-        Capacity=size_;
-        Size=size_;
-        data=new ElementType[size_+1];//0号元素不使用
-        for(int i=0;i<size_;i++)
-            data[i+1]=arr[i];
-        for(int i=Size/2;i>=1;i--)
-            percolateDown(i);
-    }
-
-    ~MinHeap(){
-        delete[] data;
-    }
-
-    void insert(ElementType x){
-        assert(Size<Capacity);
-        data[0]=x;  //设置哨兵位,下面的循环就不用对data[1]做单独处理
-        int hole=++Size;
-        for(;x<data[hole/2];hole/=2)
-            data[hole]=data[hole/2];    //大的往下移动
-        data[hole]=x;
-    }
-
-    ElementType deleteMin(){
-        assert(Size>0);
-        ElementType ret=data[1];
-        data[1]=data[Size--];
-        percolateDown(1);
-        return ret;
-    }
-
-    ElementType getMin(){
-        assert(Size>0);
-        return data[1];
-    }
-
-    void print()const{
-        int dw=2;//数字显示宽度
-        int ds=2;//数字间距
-        int treeHeight=myLog2(Size);
-        int dp=1;//指向当前打印的元素在数组中的下标
-        int width=pow(2,treeHeight)*dw+ (pow(2,treeHeight)-1)*ds;//计算最底层的最大宽度
-        for(int h=0;h<=treeHeight && dp<=Size;h++){//按层打印
-            int numOfLevel=pow(2,h);    //每层的最大元素数量
-            if(h>0){
-                int ddp=dp;
-                for(int i=0;i<(width-dw)/2;i++)
-                    cout<<" ";//打印行前空格
-                for(int n=1;n<=numOfLevel && ddp<=Size;){//每层最多有n个节点
-                    if(n%2 ==1) cout<<" /"; //打印连接符号
-                    else cout<<" \\";
-                    ddp++;
-                    n++;
-                    if(n>1 && n<=numOfLevel){
-                        for(int i=0;i<width;i++)
-                           cout<<" ";//
-                    }
-                }
-                cout<<endl;   //每层末尾打印回车
-            }
-            for(int i=0;i<(width-dw)/2;i++)
-                cout<<" ";//打印行前空格
-            for(int n=1;n<=numOfLevel && dp<=Size;){//每层最多有n个节点
-                cout.width(2);
-                cout<<data[dp++];
-                n++;
-                if(n>1 && n<=numOfLevel){
-                    for(int i=0;i<width;i++)
-                        cout<<" ";//
-                }
-            }
-            width=(width-dw)/2;
-            cout<<endl;   //每层末尾打印回车
-        }
-    }
-
-    int size(){
-        return Size;
-    }
+const int diameterOfIsland=15;
+const int halfWidthOfLake=50;
+const int maxN=20;
+int NumOfCrocdile,DistOfJump;
+struct Pos{
+    int x,y;
 };
 
-struct huffNode{
-    char ch;
-    int weight;
-    huffNode* left;
-    huffNode* right;
+Pos G[maxN];
+int first[maxN];    //用于储存第一跳的鳄鱼在G[]中的下标
+int fN;             //能满足第一跳的鳄鱼的数量
+int preVertex[maxN],minPreVertex[maxN];   //某一点的前驱点
+int dist[maxN],minDist[maxN];
 
-    bool operator<(huffNode nd){
-        return weight < nd.weight;
-    }
-    friend ostream &operator<<(ostream & os, huffNode & nd){
-        os<<nd.weight;
-        return os;
-    }
-};
-
-struct pHuff{
-    huffNode* point;
-    bool operator<(pHuff pb){
-        return point->weight < pb.point->weight;
-    }
-    friend ostream &operator<<(ostream & os, pHuff & p){
-        os<<p.point->weight;
-        return os;
-    }
-};
-
-int WPL(huffNode* r,int treeHeight){
-    if(r->right==NULL && r->left==NULL){
-        return r->weight * treeHeight;
-    }
-    return ( WPL(r->left,treeHeight+1) + WPL(r->right,treeHeight+1) );
+//判断能否从小岛上首先调到的鳄鱼的位置
+bool firstJump(Pos p){
+    double r=diameterOfIsland/2.0;
+    return p.x*p.x + p.y*p.y <= (DistOfJump+r)*(DistOfJump+r);
+}
+//判断能否直接跳到岸边
+bool jumpToBank(Pos p){
+    int x,y;
+    if(p.x<0) x=p.x*(-1);
+    else x=p.x;
+    if(p.y<0) y=p.y*(-1);
+    else y=p.y;
+    return ( halfWidthOfLake-x <= DistOfJump || halfWidthOfLake-y <= DistOfJump); //判断垂直距离
+}
+//判断能否从一个鳄鱼跳到另外一个鳄鱼
+bool jumpToCrocdile(Pos p1,Pos p2){
+    int dx=(p2.x-p1.x);
+    int dy=p2.y-p1.y;
+    return (dx*dx+dy*dy) <= DistOfJump*DistOfJump;
 }
 
-int huffmanCode(MinHeap<pHuff> & h){
-    //从最小堆，建立huffman树，树的根就是堆顶元素
-    while(h.size()>1){
-        pHuff l,r;
-        l=h.deleteMin();
-        r=h.deleteMin();
-        pHuff tt;
-        tt.point=new huffNode(); //生成新节点
-        tt.point->left=l.point;
-        tt.point->right=r.point;
-        tt.point->weight=l.point->weight + r.point->weight;
-        h.insert(tt);
-    }
-    //下面开始计算WPL
-    pHuff root;
-    root=h.getMin();
-    return WPL(root.point,0);
-}
-
-bool judgeCode(vector<string> & code){
-    // huffman每个编码的最终点必须在叶子节点上
-    // 编码串不能经过其它编码已经确定的叶子节点
-    struct nod{
-        int isLeaf; //用于标注该节点是叶子节点
-        nod* left;
-        nod* right;
-        nod(){
-            isLeaf=0;
-            left=right=NULL;
-        }
-    };
-
-    bool ans=true;
-    int num=code.size();
-    nod* root=new nod;
-    for(int i=0;i<num;i++){
-        string s=code[i];
-        nod* p=root;
-        for(int j=0;j<s.length();j++){
-            if(s[j]=='0'){//往左
-                if(p->left==NULL){//左子树为空
-                    p->left=new nod;
-                    p=p->left;
-                }
-                else{   //左子树非空
-                    p=p->left;
-                    if(p->isLeaf){  //经过叶子节点
-                        ans=false;
-                        break;
-                    }
-                }
-            }
-            else{   //s[i]==1，往右
-                if(p->right==NULL){//右子树为空
-                    p->right=new nod;
-                    p=p->right;
-                }
-                else{   //右子树非空
-                    p=p->right;
-                    if(p->isLeaf){  //经过叶子节点
-                        ans=false;
-                        break;
-                    }
-                }
-            }
-        }
-        // 对叶子节点进行标注
-        if(p->left==NULL && p->right==NULL)
-            p->isLeaf=1;
-        // 不是叶子节点则说明本序列是某个编码的前缀码
-        if(p->left || p->right){
-            ans=false;
+//从出岛后的第一个点u开始遍历
+int bfs(int u){
+    memset(dist,-1, sizeof(dist));
+    memset(preVertex,-1, sizeof(preVertex));
+    queue<int> q;
+    int lastPoint=-1;
+    dist[0]=0;
+    dist[u]=1;  //从岛跳到这个点，已经用了一步
+    preVertex[u]=0;
+    q.push(u);
+    while(!q.empty()){
+        int v=q.front();
+        q.pop();
+        if( jumpToBank(G[v]) ){ //能从这一点跳到岸上，则返回该点的序号
+            lastPoint=v;
             break;
         }
+        //对应v的每一个邻接点
+        for(int w=1; w<=NumOfCrocdile;w++){
+            if(dist[w]==-1 && w!=v){
+                if( jumpToCrocdile(G[v],G[w]) ){  //能从这个点直接跳到岸上 || 能从一个鳄鱼v跳到另外一个鳄鱼w
+                    q.push(w);
+                    dist[w]=dist[v]+1;
+                    preVertex[w]=v;
+                }
+            }
+        }
     }
-    return ans;
+    return lastPoint;
 }
 
 
 int main(){
-//    freopen("/Users/xcm/xcmprogram/netlesson/ds-zju/in.txt","r",stdin);
-    int N;
-    scanf("%d",&N);
-    MinHeap<pHuff> ha(N);
-    pHuff t;
-    for(int i=0;i<N;i++){//输入数据
-        cin>>C[i]>>F[i];
-        t.point=new huffNode(); //生成新节点
-        t.point->ch=C[i];
-        t.point->weight=F[i];
-        t.point->left=t.point->right=NULL;
-        ha.insert(t);
-        }
-
-//    printf("After insert init , the tree is: \n");
-//    ha.print();
-
-    int wplHa=huffmanCode(ha);
-
-//    printf("After huffmanCode , the tree is: \n");
-//    ha.print();
-//    printf("The WPL is: %d\n",wplHa);
-
-    int Case;
-    cin>>Case;
-    while(Case--){
-        Code.clear();   //少了这一句会导致case1正确，后面的都错误
-        string s;
-        char ch;
-        int wplCase=0;
-        bool ans=true;
-        for(int i=0;i<N;i++){
-            cin>>ch;
-            cin>>s;
-            wplCase+= F[i]*s.length();
-            Code.push_back(s);
-        }
-        if( wplHa==wplCase && judgeCode(Code) )
-            cout<<"Yes"<<endl;
-        else
-            cout<<"No"<<endl;
+    freopen("/Users/xcm/xcmprogram/netlesson/ds-zju/in.txt","r",stdin);
+    scanf("%d %d",&NumOfCrocdile,&DistOfJump);
+    fN=0;
+    //读入鳄鱼位置数据，并找出能完成第一跳的鳄鱼位置，并记录其位置(在G中的下标)
+    //编号0代表小岛
+    double r=diameterOfIsland/2.0;
+    for(int i=1;i<=NumOfCrocdile;){
+        int x,y;
+        scanf("%d %d",&x,&y);
+        if(x<=-50 || x >=50 || y<=-50 || y>=50)continue;
+        if(x*x + y*y <= r*r) continue;
+        G[i].x=x;
+        G[i].y=y;
+        if(firstJump(G[i]))
+            first[fN++]=i;
+        i++;
     }
 
+    int lastPoint=-1;
+    int minStep=maxN;
+    if(DistOfJump>=42.5){   //直接从岛跳到岸上
+        lastPoint=0;
+        dist[0]=0;
+        minStep=1;
+    }
+    else{       //从第一跳的鳄鱼开始遍历
+        int Case=0;
+        for(int i=0;i<fN;i++){
+            int curLastPoint=bfs(first[i]);
+//            if(curLastPoint>=0){
+//                printf("Case %d ,the step is %d ; Last Point is: %d[%d,%d] \n",
+//                        ++Case,dist[curLastPoint]+1,curLastPoint,G[curLastPoint].x,G[curLastPoint].y);
+//            }
+            //找到一条路径，同时该路径必以前的短，记录该路径及先关数据
+            //也就是说，如果找到两条长度一样的路径，也是输出第一条找到的
+            //这里找到的是最后一个点，通过该点可以跳到岸上，所有记录的步数应该加1
+            if(curLastPoint>=0 && dist[curLastPoint]+1<minStep){
+                minStep=dist[curLastPoint]+1;
+                lastPoint=curLastPoint;
+                memcpy(minDist,dist,sizeof(dist));
+                memcpy(minPreVertex,preVertex,sizeof(preVertex));
+            }
+        }
+    }
+
+    if(lastPoint>=0){
+        printf("Yes\n");
+        //打印路径
+        printf("%d\n",minStep);
+        stack<int> s;
+        //刚开始这里开始写成 i=preVertex[lastPoint]造成死循环
+        for(int i=lastPoint;i>0;i=minPreVertex[i])
+            s.push(i);
+        while(!s.empty()){
+            int p=s.top();
+            s.pop();
+            printf("%d %d\n",G[p].x,G[p].y);
+        }
+    }
+    else
+        printf("0\n");
     return 0;
 }
