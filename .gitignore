@@ -40,4 +40,6 @@ cmake-build-debug/
 #vscode
 .vscode
 *.json
-
+*.bak
+*.dwl
+*.dwl2

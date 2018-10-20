@@ -79,7 +79,7 @@ void ReverseList(){
             temp=data[pold].next;
             data[pold].next=pnew;//后点指向前点
             //修改标记点
-            pnew=pold;//向后移位
+            pnew=pold;//向后移位q
             pold=temp;//向后移位
             k++;
         }
