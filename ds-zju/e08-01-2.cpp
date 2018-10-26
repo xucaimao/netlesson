@@ -1,6 +1,7 @@
 /*中国大学MOOC-陈越、何钦铭-数据结构-2017秋
  * 08-图7 公路村村通
  * 网上程序，编程很简单，按Prime的原理实现，容易理解
+ * 和dijkstra算法非常类似，只是在最终的转换方程上有所区别
  * 考察知识点--最小生成树
  * 扩充了记录路径及打印的功能
  * */
@@ -21,6 +22,7 @@ int findmin(int N){
     int minV;
     int mindist = INFINITY;
     for(int V = 1; V <= N; V++) {
+        //节点没有被访问 && 比当前最小值小
         if(dist[V] != 0 && dist[V] < mindist) {
             mindist = dist[V];
             minV = V;
@@ -35,7 +37,7 @@ int findmin(int N){
 int prim(int S, int N) {
     int V;
     for(V = 1; V <= N; V++) {
-        dist[V] = G[1][V];  // dist[v]=C(s,v) 当sv连通时; dist[v]=INFINITY  当sv不连通时;
+        dist[V] = G[1][V];  // dist[v]=C(s, v) 当sv连通时; dist[v]=INFINITY  当sv不连通时;
         path[V]=-1;
     }
     int allweight = 0,Vcount = 0;
@@ -54,7 +56,6 @@ int prim(int S, int N) {
         allweight += dist[V];
         Vcount++;
         dist[V] = 0;    //把V收入已访问
-
 
         for(int W = 1; W <= N; W++) {   //遍历V的邻接点
             if(G[V][W] < INFINITY){
