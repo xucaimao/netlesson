@@ -3,63 +3,48 @@
  7:List
  write by xucaimao,2018-10-25
 */
+#include <cstdio>
 #include <iostream>
+#include <cstring>
 #include <list>
 #include <map>
-#include <string>
 using namespace std;
-typedef map<int,list<int>> myMap;
-myMap m;
 
-int main()
-{
+map<int,list<int> > m;
+
+int n,x,y;
+char op[10000];
+int main(){
     freopen("/Users/xcm/xcmprogram/netlesson/pa3/in.txt","r",stdin);
-    int n;
-    cin>>n;
-    myMap::iterator it;
-    myMap::iterator it2;
+    scanf("%d",&n);
     while(n--){
-        char cmd[10];
-        int id,num;
-        cin>>cmd;
-        if(cmd[0]=='n'){
-            cin>>id;
-            m.insert(myMap::value_type( id,list<int>() ) );
+        scanf("%s",op);
+        if(strcmp(op,"new")==0){
+            scanf("%d",&x);
+            m.insert(map<int,list<int> >::value_type(x,list<int>()));
         }
-        else if(cmd[0]=='a'){
-            cin>>id>>num;
-            it=m.find(id);
-            if( it!=m.end() )
-                it->second.push_back(num);
+        if(strcmp(op,"add")==0){
+            scanf("%d%d",&x,&y);
+            m[x].push_back(y);
         }
-        else if(cmd[0]=='o'){
-            cin>>id;
-            it=m.find(id);
-            if( it!=m.end() ){
-                it->second.sort();
-                list<int>::iterator i;
-                for(i=it->second.begin();i!=it->second.end();i++)
-                    cout<<*i<<" ";
-                cout<<endl;
+        if(strcmp(op,"merge")==0){
+            scanf("%d%d",&x,&y);
+            m[x].merge(m[y]);
+            //m[y].clear();
+        }
+        if(strcmp(op,"unique")==0){
+            scanf("%d",&x);
+            m[x].sort();
+            m[x].unique();
+        }
+        if(strcmp(op,"out")==0){
+            scanf("%d",&x);
+            m[x].sort();
+            list<int>::iterator it;
+            for(it=m[x].begin();it!=m[x].end();it++){
+                printf("%d ",*it);
             }
-
-        }
-        else if(cmd[0]=='m'){
-            int id1,id2;
-            cin>>id1>>id2;
-            it=m.find(id1);
-            it2=m.find(id2);
-            if( it!=m.end() && it2!=m.end() ){
-                m[id1].sort();
-                m[id2].sort();
-                m[id1].merge(m[id2]);
-            }
-        }
-        else if(cmd[0]=='u'){
-            cin>>id;
-            it=m.find(id);
-            if( it!=m.end() )
-                it->second.unique();
+            printf("\n");
         }
     }
     return 0;
