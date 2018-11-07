@@ -4,8 +4,10 @@
  * 回溯法
  * */
 #include <iostream>
+#include <cstring>
 #include <cstdio>
 #include <string>
+#include <algorithm>
 using namespace std;
 const int maxN=10000+10;
 int maxScore[6];

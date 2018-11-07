@@ -93,7 +93,6 @@ Warrior::Warrior(Headquarter * p,int life_,int kindNo_,int No_,int color_):pHead
             break;
         case 4: //wolf
             break;
-
     }
 }
 
@@ -152,14 +151,15 @@ bool Headquarter::enableMake(){
 void Headquarter::makewarrior(int currentTime){
     if( !stopped ){
         if( enableMake() ){
-            //找到第一个可以制造的武士
+            //根据剩余生命值，找到第一个可以制造的武士
             //注意这里的序号转换 makeOrd[color][curMakeIdx]
             while(valueOfMake[ makeOrd[color][curMakeIdx] ] > lifeMatter){
-                curMakeIdx=(curMakeIdx+1)%5;  //循环
+                curMakeIdx=(curMakeIdx+1)%5;  //当前制造的士兵种类循环
             }
-            lifeMatter-=valueOfMake[ makeOrd[color][curMakeIdx] ];  //生命值减少
             //下面，把制造的士兵序号，转换到在worriorName[]中的位置，也就是士兵的种类
             int warriorKind=makeOrd[color][curMakeIdx];
+            lifeMatter-=valueOfMake[ warriorKind ];  //生命值减少
+
             warrior[ warriorKind ]++;     //相应的士兵增加
             //分配士兵对象的空间，并与数组建立联系
             //注意数组下标从0开始，士兵编号从1开始
