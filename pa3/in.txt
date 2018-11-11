@@ -1,6 +1,6 @@
-A Tom1 30
-A Tom2 40
-Q Tom3
-A Tom4 89
-Q Tom1
-Q Tom2
+A 3 5
+A 4 2
+Qx 4
+R 4 2
+A 4 3
+Qy 3

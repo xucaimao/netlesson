@@ -33,8 +33,10 @@ class myComp{
 public:
     //重点是三个const的使用，以及判断条件的建立
     bool operator()(const pair<int,int> &a,const pair<int,int> &b) const{
+        //头两句用于lower_bound的特殊点x=-1 y=-1进行排序使用的
         if(a.first==-1 || b.first==-1)return a.second>b.second;
         if(a.second==-1 || b.second==-1)return a.first<b.first;
+        //用于set内的普通节点排序
         if(a.first<b.first)return a.second>b.second;
         return false;
     }
@@ -49,6 +51,7 @@ int main() {
             int x, y;
             cin >> x >> y;
             S.insert(make_pair(x, y));
+            //自己增加的输出语句
             cout<<"After insert:"<<endl;
             for(auto e:S)
                 cout<<"["<<e.first<<","<<e.second<<"] ";
@@ -56,24 +59,10 @@ int main() {
         } else if (cmd == "Qx") {
             int x;
             cin >> x;
-            //由题，x 与 y 都是 0 到 10^9 之间的整数
-//            S.insert(make_pair(x, -1));
-//            cout<<"After insert:"<<endl;
-//            for(auto e:S)
-//                cout<<"["<<e.first<<","<<e.second<<"] ";
-//            cout<<endl;
-
             cout << S.lower_bound(make_pair(x, -1))->second << endl;
         } else if (cmd == "Qy") {
             int y;
             cin >> y;
-
-//            S.insert(make_pair(-1, y));
-//            cout<<"After insert:"<<endl;
-//            for(auto e:S)
-//                cout<<"["<<e.first<<","<<e.second<<"] ";
-//            cout<<endl;
-
             cout << S.lower_bound(make_pair(-1, y))->first << endl;
         } else {
             int x, y;
