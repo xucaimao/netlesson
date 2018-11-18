@@ -70,7 +70,7 @@ void mergeSort(int arr[],int n){
             cout<<"Merge Sort"<<endl;
             haveans=true;
         }
-
+        //做一次归并
         l=0;
         for(;;){
             m=l+step;
