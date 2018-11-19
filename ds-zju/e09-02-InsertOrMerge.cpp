@@ -1,6 +1,7 @@
 /*中国大学MOOC-陈越、何钦铭-数据结构-2018秋
  * 09-排序2 Insert or Merge （25 分
  * wirte by xucaimao,2018-11-04
+ * 最小N未通过测试
  * */
 #include <iostream>
 using namespace std;
