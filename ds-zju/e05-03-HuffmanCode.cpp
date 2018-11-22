@@ -1,6 +1,7 @@
 /*中国大学MOOC-陈越、何钦铭-数据结构-2018秋
  * 05-树9 Huffman Codes （30 分）
  * wirte by xucaimao,2018-10-14
+ * 2018-11-20把程序中的无用部分做了删减
  * 初次尝试泛型，感觉很爽
  * */
 #include <iostream>
@@ -52,16 +53,6 @@ public:
         Capacity=capacity_;
         Size=0;
         data=new ElementType[Capacity+1];//0号元素不使用
-    }
-
-    MinHeap(int arr[],int size_){
-        Capacity=size_;
-        Size=size_;
-        data=new ElementType[size_+1];//0号元素不使用
-        for(int i=0;i<size_;i++)
-            data[i+1]=arr[i];
-        for(int i=Size/2;i>=1;i--)
-            percolateDown(i);
     }
 
     ~MinHeap(){
@@ -140,42 +131,42 @@ struct huffNode{
     int weight;
     huffNode* left;
     huffNode* right;
-
-    bool operator<(huffNode nd){
-        return weight < nd.weight;
-    }
-    friend ostream &operator<<(ostream & os, huffNode & nd){
-        os<<nd.weight;
-        return os;
+    huffNode(){}
+    huffNode(char c,int w):ch(c),weight(w){
+        left=right=NULL;
     }
 };
 
 struct pHuff{
+    //堆中存储的是节点的指针，为了对指针所指向的节点进行排序，定义了此结构体
     huffNode* point;
     bool operator<(pHuff pb){
         return point->weight < pb.point->weight;
     }
     friend ostream &operator<<(ostream & os, pHuff & p){
-        os<<p.point->weight;
+        os<<p.point->ch<<p.point->weight;
         return os;
     }
 };
 
 int WPL(huffNode* r,int treeHeight){
     if(r->right==NULL && r->left==NULL){
+        //是叶子节点，返回该节点的wpl值
         return r->weight * treeHeight;
     }
+    //否则，对于huffman树，不是叶子节点，一定有两个孩子
     return ( WPL(r->left,treeHeight+1) + WPL(r->right,treeHeight+1) );
 }
 
 int huffmanCode(MinHeap<pHuff> & h){
     //从最小堆，建立huffman树，树的根就是堆顶元素
+    //建完树后的堆中，只有一个元素，指向树的根
     while(h.size()>1){
         pHuff l,r;
         l=h.deleteMin();
         r=h.deleteMin();
         pHuff tt;
-        tt.point=new huffNode(); //生成新节点
+        tt.point=new huffNode(); //生成新的非叶子节点
         tt.point->left=l.point;
         tt.point->right=r.point;
         tt.point->weight=l.point->weight + r.point->weight;
@@ -248,23 +239,21 @@ bool judgeCode(vector<string> & code){
 
 
 int main(){
-//    freopen("/Users/xcm/xcmprogram/netlesson/ds-zju/in.txt","r",stdin);
+    freopen("in.txt","r",stdin);
     int N;
     scanf("%d",&N);
     MinHeap<pHuff> ha(N);
     pHuff t;
-    for(int i=0;i<N;i++){//输入数据
+    for(int i=0;i<N;i++){//输入字符及相应权重数据
         cin>>C[i]>>F[i];
-        t.point=new huffNode(); //生成新节点
-        t.point->ch=C[i];
-        t.point->weight=F[i];
-        t.point->left=t.point->right=NULL;
+        t.point=new huffNode(C[i],F[i]); //生成新节点
         ha.insert(t);
     }
 
 //    printf("After insert init , the tree is: \n");
 //    ha.print();
 
+    //根据最小堆，建立huffman树，并计算WPL
     int wplHa=huffmanCode(ha);
 
 //    printf("After huffmanCode , the tree is: \n");
@@ -280,8 +269,8 @@ int main(){
         int wplCase=0;
         bool ans=true;
         for(int i=0;i<N;i++){
-            cin>>ch;
-            cin>>s;
+            cin>>ch;    //读字符
+            cin>>s;     //读字符的编码
             wplCase+= F[i]*s.length();
             Code.push_back(s);
         }
