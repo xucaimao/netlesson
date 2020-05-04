@@ -20,7 +20,7 @@ vector<int> twoSum(vector<int>& nums, int target) {
     return ans;
 }
 
-int main() {
+int mymain() {
     freopen("/Users/xcm/xcmprogram/netlesson/LeetCode/in.txt","r",stdin);
     int n,tar;
     cin>>n>>tar;
