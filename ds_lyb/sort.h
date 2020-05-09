@@ -78,7 +78,24 @@ void mergeSortBU(T arr[],int n){
     }
 }
 
+template <typename T>
+int partition(T arr[],int l,int r){
 
+}
+
+//快速排序，对arr[l...r]部分进行排序
+template <typename T>
+void __quickSort(T arr[],int l,int r){
+    if(l>=r)return;
+    int p=partition(arr,l,r);
+    __quickSort(arr,l,p-1);
+    __quickSort(arr,p+1,r);
+}
+//快速排序，对有n个元素的数组arr进行排序
+template <typename T>
+void quickSort(T arr[],int n){
+    __quickSort(arr,0,n-1);
+}
 int mymain() {
     int n=20;
     int *arr=SortTestHelper::generateRandomArray(n,0,n);
