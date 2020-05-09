@@ -101,7 +101,7 @@ public:
     }
 };
 
-int main() {
+int mymain() {
     Vector<int> a;
     a.print();
     for(int i=1;i<=10;i++)a.push_back(i);

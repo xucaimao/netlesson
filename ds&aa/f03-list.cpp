@@ -14,7 +14,7 @@ private:
         T data;
         Node * prev;
         Node * next;
-        //value=T{},这一句不可少
+        //value=T{},这一句不可少（当T不是基本类型时）
         Node(const T& value=T{},Node* p=NULL,Node* n=NULL):data{value},prev{p},next{n}{}
     };
     int theSize;
@@ -49,7 +49,7 @@ public:
             erase(head->next);
         }
     }
-
+    //构造函数
     List(){
         init();
     }
@@ -62,6 +62,8 @@ public:
             p=p->next;
         }
     }
+
+    //析构函数
     ~List(){
         clear();
         delete head;
@@ -106,7 +108,7 @@ public:
 
 };
 
-int main() {
+int mymain() {
     List<int> a;
     a.print();
     for(int i=1;i<=5;i++) a.push_back(i);
