@@ -78,9 +78,23 @@ void mergeSortBU(T arr[],int n){
     }
 }
 
+//返回p，使得arr[l...p-1]<arr[p]<arr[p+1...r]
 template <typename T>
 int partition(T arr[],int l,int r){
+    T v=arr[l];
 
+    //arr[l+1...p]<v;初始[l+1...l]为空区间
+    //arr[p+1...i-1]>v;初始[l+1...l]为空区间
+    //维护区间的有效性非常关键
+    int p=l;
+    for(int i=l+1;i<=r;i++){
+        if(arr[i]<v){
+            swap(arr[p+1],arr[i]);
+            p++;
+        }
+    }
+    swap(arr[l],arr[p]);
+    return p;
 }
 
 //快速排序，对arr[l...r]部分进行排序
@@ -96,19 +110,61 @@ template <typename T>
 void quickSort(T arr[],int n){
     __quickSort(arr,0,n-1);
 }
+
+//快速排序，对arr[l...r]部分进行排序
+template <typename T>
+void __quickSort3way(T arr[],int l,int r){
+    if(l>=r)return;
+    swap(arr[l],arr[ rand()%(r-l+1) +l ]);
+    T v=arr[l];
+
+    //begin of prtition
+    //arr[l+1...lt]<v
+    //arr[lt+1...i-1]==v
+    //arr[gt...r]>v
+    int lt=l;   //[l+1...lt]<v 初始为空区间
+    int i=l+1;  //[lt+1...i-1]==v 初始为空区间
+    int gt=r+1; //[gt...r]>v 初始为空区间
+    while(i<gt){
+        if( arr[i]>v ){
+            swap(arr[i],arr[gt-1]);
+            gt--;
+        }
+        else if(arr[i]<v){
+            swap(arr[i],arr[lt+1]);
+            lt++;
+            i++;
+        }
+        else i++;   //arr[i]==v
+    }
+    swap(arr[l],arr[lt]);
+    lt--;
+    //end of partition
+    __quickSort3way(arr,l,lt);
+    __quickSort3way(arr,gt,r);
+}
+//快速排序，对有n个元素的数组arr进行排序
+template <typename T>
+void quickSort3way(T arr[],int n){
+    srand(time(NULL));
+    __quickSort3way(arr,0,n-1);
+}
+
+
+
+
 int mymain() {
-    int n=20;
-    int *arr=SortTestHelper::generateRandomArray(n,0,n);
+    int n=1000000;
+    int *arr=SortTestHelper::generateRandomArray(n,0,100);
 //    int *arr=SortTestHelper::generateNearlyOrderArray(n,10);
-    SortTestHelper::printArray(arr,n);
-    mergeSortBU(arr,n);
-    SortTestHelper::printArray(arr,n);
-//    int *arr2=SortTestHelper::copyIntArray(arr,n);
+
+//    mergeSortBU(arr,n);
+    int *arr2=SortTestHelper::copyIntArray(arr,n);
 //    SortTestHelper::printArray(arr,n);
-//    SortTestHelper::testSort("merge     Sort",mergeSort,arr,n);
-//    SortTestHelper::testSort("Insertion Sort",insertSort,arr2,n);
-//    delete[] arr;
-//    delete[] arr2;
+    SortTestHelper::testSort("merge      Sort",mergeSort,arr,n);
+    SortTestHelper::testSort("quick Sort 3way",quickSort3way,arr2,n);
+    delete[] arr;
+    delete[] arr2;
     return 0;
 }
 
