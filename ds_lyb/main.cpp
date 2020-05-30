@@ -1,5 +1,5 @@
 #include <iostream>
-#include "heap.h"
+#include "sort.h"
 
 int main() {
     mymain();

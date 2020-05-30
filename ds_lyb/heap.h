@@ -8,7 +8,7 @@
 #include <iostream>
 #include <cmath>
 using namespace std;
-//最大堆
+//最大堆--父节点比任一孩子结点的值都要大
 template <typename Item>
 class MaxHeap{
 private:
@@ -16,6 +16,7 @@ private:
     int count;      //实际元素数量
     int capacity;   //堆的容量
 
+    //插入元素后，维护堆定义的正确性
     void shiftUp(int p){
         while(p>1 && data[p/2]<data[p]){
             swap(data[p],data[p/2]);
@@ -43,7 +44,7 @@ private:
         }
     }
     //教程的写法，逻辑优化
-    void shiftDown1(int p){
+    void shiftDown(int p){
         while(p*2<=count){//有左孩子
             int target=p*2;
             //有右孩子且右孩子比左孩子大
@@ -59,23 +60,6 @@ private:
         }
     }
     //此程序主要是减少swap的次数，类似于插入排序。
-    void shiftDown(int p){
-        Item item=data[p];
-        int target;
-        while(p*2<=count){//有左孩子
-            target=p*2;
-            //有右孩子且右孩子比左孩子大
-            if(target+1 <= count && data[target]< data[target+1])
-                target++;
-            //此时target指向两个孩子中大的那一个
-            if(data[target]<item)
-                break;
-            //data[p]<data[target],父节点比子结点小，不满足最大堆的定义，需要交换数据
-            data[p]=data[target];
-            p=target;
-        }
-        data[target]=item;
-    }
 
     void addSize(){
         Item* temp=data;
@@ -117,21 +101,6 @@ private:
     }
 
 public:
-    //构造函数，设置容量的初始值
-    MaxHeap(int capacity=10){
-        this->capacity=capacity;
-        data=new Item[capacity+1];
-        count=0;
-    }
-    ~MaxHeap(){
-        delete [] data;
-    }
-    int size(){
-        return count;
-    }
-    bool isEmpty(){
-        return count==0;
-    }
     //考虑数组容量的问题
     void insert(Item item){
         if(count+1 >capacity){
@@ -142,7 +111,33 @@ public:
         data[++count]=item;
         shiftUp(count);
     }
+    //构造函数，设置容量的初始值
+    MaxHeap(int capacity=10){
+        this->capacity=capacity;
+        data=new Item[capacity+1];
+        count=0;
+    }
+    //构造函数，根据数组创建堆
+    MaxHeap(Item arr[],int n){
+        capacity=n;
+        data=new Item[capacity+1];
+        count=n;
+        for(int i=n/2;i>=1;i--)
+            shiftDown(i);
+    }
+    ~MaxHeap(){
+        delete [] data;
+    }
+    int size(){
+        return count;
+    }
+    bool isEmpty(){
+        return count==0;
+    }
+
+    //取出堆中的最大元素(堆顶元素)并删除
     Item extractMax(){
+        assert(count>0);
         Item item=data[1];
         data[1]=data[count--];
         shiftDown(1);
@@ -206,14 +201,16 @@ public:
 };
 
 
-int mymain(){
+int mymain0(){
 //    MaxHeap<int> heap=MaxHeap<int>(100);
-    MaxHeap<int> heap;
+    int n=20;
+    int arr[n];
     srand(time(NULL));
-    for(int i=0;i<10;i++)
-        heap.insert(rand()%100);
+    for(int i=0;i<n;i++)
+        arr[i]=(rand()%100);
+    MaxHeap<int> heap=MaxHeap<int>(arr,n);
     heap.print();
-    for(int i=0;i<10;i++){
+    for(int i=0;i<n;i++){
         cout<< heap.extractMax()<<" ";
 //        heap.print();
     }

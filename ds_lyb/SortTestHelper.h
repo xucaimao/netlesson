@@ -9,11 +9,11 @@
 using namespace std;
 
 namespace SortTestHelper{
-    int* generateRandomArray(int n,int l,int r){
+    int* generateRandomArray(int n,int left,int right){
         int* arr=new int[n];
         srand(time(NULL));
         for(int i=0;i<n;i++)
-            arr[i]=rand()%(r-l+1) + l;
+            arr[i]=rand()%(right-left+1) + left;
         return arr;
     }
 

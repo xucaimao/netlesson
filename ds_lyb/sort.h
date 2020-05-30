@@ -6,6 +6,26 @@
 #define DS_LYB_SORT_H
 
 #include "SortTestHelper.h"
+#include "heap.h"
+
+
+
+
+template< typename T>
+void heapSort1(T arr[],int n){
+    MaxHeap<T> hp=MaxHeap<T>(n);
+    for(int i=0;i<n;i++)
+        hp.insert(arr[i]);
+    for(int i=n-1;i>=0;i--)
+        arr[i]=hp.extractMax();
+}
+
+template <typename T>
+void heapSort2(T arr[],int n){
+    MaxHeap<T> hp=MaxHeap<T>(arr,n);
+    for(int i=n-1;i>=0;i--)
+        arr[i]=hp.extractMax();
+}
 
 template <typename T>
 void selectSort(T arr[],int n){
@@ -160,11 +180,17 @@ int mymain() {
 
 //    mergeSortBU(arr,n);
     int *arr2=SortTestHelper::copyIntArray(arr,n);
+    int *arr3=SortTestHelper::copyIntArray(arr,n);
+    int *arr4=SortTestHelper::copyIntArray(arr,n);
 //    SortTestHelper::printArray(arr,n);
     SortTestHelper::testSort("merge      Sort",mergeSort,arr,n);
     SortTestHelper::testSort("quick Sort 3way",quickSort3way,arr2,n);
+    SortTestHelper::testSort("heap      Sort1",heapSort1,arr3,n);
+    SortTestHelper::testSort("heap      Sort2",heapSort2,arr3,n);
     delete[] arr;
     delete[] arr2;
+    delete[] arr3;
+    delete[] arr4;
     return 0;
 }
 
